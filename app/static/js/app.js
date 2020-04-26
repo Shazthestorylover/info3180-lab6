@@ -41,40 +41,48 @@ Vue.component('app-footer', {
     }
 });
 
-Vue.component('news-list', 
-{
+Vue.component('news-list', {
     template: `
         <div class="news">
             <h2> News </h2>
-            <ul class="news__list">
-                <li class="news__item"> News item 1 </li>
-                <li class="news__item"> News item 2 </li>
-                <li class="news__item"> News item 3 </li>
+            <ul class = "news__list">
+            
+                <div class = "grid">
+                    <li v-for = "article in articles" class="news__item"> 
+                
+                        <div class = "card">
+                            <div class = "card-body">
+                                <h5 class = "card-title"> {{article.title}} </h5>
+                                <img class = "card-img-top" src = {{article.urlToImage}} />
+                        
+                                <p> {{article.description}} </p>
+                        
+                            </div>
+                        </div>
+                    
+                    </li>
+                </div>
+                
             </ul>
         </div>
         `,
-        created: function()
-        {
-            //let self = this;
+        created: function(){
+            let self = this;
             
             fetch('https://newsapi.org/v2/top-headlines?country=us&apiKey=2b189d2b77644fe3be05c404e32f9ff2')
-                .then(function(response)
-                {
+                .then(function(response){
                     return response.json();
                 })
-                .then(function(data)
-                {
+                .then(function(data){
                     console.log(data);
-                    //self.articles = data.articles;
+                    self.articles = data.articles;
                 });
         },
-        /*data: function()
-        {
-            return
-            {
+        data: function(){
+            return {
                 articles: []
             }
-        }*/
+        }
 });
 
 
