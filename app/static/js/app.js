@@ -47,21 +47,32 @@ Vue.component('news-list', {
             <h2> News </h2>
             <ul class = "news__list">
             
-                <div class = "grid">
+            
+                <div class = "grid-container">
                     <li v-for = "article in articles" class="news__item"> 
                 
-                        <div class = "card">
-                            <div class = "card-body">
-                                <h5 class = "card-title"> {{article.title}} </h5>
-                                <img class = "card-img-top" src = {{article.urlToImage}} />
+                        <div class = "news-box">
+                            <div class = "news-box-body">
+                                <h5 class = "news-title"> {{article.title}} </h5>
+                                <img class = "news-image-top" src = "/static/images/placeholder.jpg" />
                         
-                                <p> {{article.description}} </p>
+                                <p class= "news-description"> {{article.description}} </p>
+                            </div>
+                        </div>
                         
+                        <div class = "form-inline d-flex justify-content-center">
+                            <div class = "form-group mx-sm-3 mb-2">
+                                <label class = "sr-only" for="search"> Search </label>
+                                <input type="search" name = "search" v-model = "searchTerm" id = "search" class = "form-control mb-2 mr-sm-2" placeholder = "Please enter search term here" />
+                                
+                                <button class = "btn btn-primary-mb2" @click = "searchNews"> Search </button>
                             </div>
                         </div>
                     
                     </li>
                 </div>
+                
+                
                 
             </ul>
         </div>
@@ -80,7 +91,23 @@ Vue.component('news-list', {
         },
         data: function(){
             return {
-                articles: []
+                articles: [],
+                searchTerm: ''
+            }
+        },
+        methods: {
+            searchNews: function(){
+                let self = this;
+                
+                fetch('https://newsapi.org/v2/everything?q=' + self.searchTerm + '&language=en&apiKey=2b189d2b77644fe3be05c404e32f9ff2')
+                    .then(function(response){
+                        return response.json;
+                    })
+                    .then(function(data){
+                        console.log(data);
+                        self.articles = data.articles;
+                    });
+                    
             }
         }
 });
